@@ -1,0 +1,131 @@
+type Query{
+    getDevice(id: ID!): Device
+    getAllDevices: [Device!]!
+    getRoomDevices(roomId:ID!): [Device!]!
+}
+
+#Device
+union Device = AdjustableDevice | SwitchableDevice
+
+enum DeviceType{
+    SWITCHABLE
+    ADJUSTABLE
+}
+
+type AdjustableDevice{
+    id: ID!
+    type: DeviceType!
+    totalConsumptionPerHour: Float!
+    dailyConsumption: Float!
+    room: Room
+    status: Boolean!
+    level:Float!
+}
+
+type SwitchableDevice{
+    id: ID!
+    type: DeviceType!
+    totalConsumptionPerHour: Float!
+    dailyConsumption: Float!
+    room: Room
+    status: Boolean!
+}
+
+
+input DeviceInput{
+    type: DeviceType!
+    totalConsumptionPerHour: Float!
+    roomId: ID!
+}
+
+#Room
+type Room{
+    id:ID!
+    name: String!
+    devices:[Device!]
+}
+
+#soru: neden id de yazılmıyor inputta
+input RoomInput{
+    name:String!
+}
+
+#User
+type User{
+    id: ID!
+    name:String!
+    email:String!
+    automationRules:[AutomationRule!]
+}
+
+input UserInput{
+    name: String!
+    email: String!
+}
+
+#Action
+union Action= TurnOnAction | TurnOffAction
+
+type TurnOnAction{
+    type: String!
+}
+
+type TurnOffAction{
+    type: String!
+}
+
+input ActionInput{
+    type: String! #bu string olmamalı bence
+}
+
+#Condition
+union Condition= TemperatureCondition | TimeCondition
+
+type TemperatureCondition{
+    threshold: Float!
+}
+
+type TimeCondition{
+    targetTime: String!
+}
+
+input ConditionInput{
+    type : String! #bunu string yerine nasıl yapabilirz
+    config: ConditionConfigInput!
+}
+#config inputu ayırmak gerekli mi?
+input ConditionConfigInput{
+    threshold: Float
+    targetTime: String
+}
+
+#Automation Rule
+type AutomationRule{
+    id: ID!
+    name: String!
+    device: [Device!]
+    condition: Condition!
+    action: Action!
+}
+
+input AutomationRuleInput{
+    name:String!
+    deviceIds:[ID!]!
+    condition: ConditionInput!
+    action: ActionInput!
+}
+
+#Energy Report
+
+type EnergyReport{
+    reportId:ID!
+    device: Device!
+    date: String! #date classını kullandıgımızda da mı string?
+    totalConsumption: Float!
+}
+
+input EnergyReportInput{
+    deviceId:ID!
+    date: String! #String?
+    totalConsumption: Float!
+}
