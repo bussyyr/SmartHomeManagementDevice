@@ -1,0 +1,169 @@
+type Query{
+    getDeviceById(id: ID!): Device
+    getAllDevices: [Device!]!
+
+    getUserById(id: ID!): User
+    getAllUsers: [User!]!
+    getUserByEmail(email:String!): User
+    getUserByName(name:String!): User
+
+    getRoomById(id: ID!): Room
+    getAllRooms: [Room!]!
+
+    getEnergyReportsById(id: ID!): EnergyReport
+    getEnergyReportsByDate(date: String!): EnergyReport
+    getAllEnergyReports: [EnergyReport!]!
+
+    getAutomationRuleById(id: ID!): AutomationRule
+    getAllAutomationRule: [AutomationRule!]!
+
+}
+
+type Mutation{
+    createDevice(input: DeviceInput!): Device!
+    updateDevice(id: ID!, input: DeviceInput!): Device!
+    deleteDevice(id: ID!): Boolean!
+
+    createUser(input: UserInput!): User!
+    updateUser(id: ID!, input: UserInput!): User!
+    deleteUser(id: ID!): Boolean!
+
+    createAutomationRule(input: AutomationRuleInput!): AutomationRule!
+    updateAutomationRule(id: ID!, input: AutomationRuleInput!): AutomationRule!
+    deleteAutomationRule(id: ID!): Boolean!
+
+    createEnergyReport(input: EnergyReportInput!): EnergyReport!
+    deleteEnergyReport(id: ID!): Boolean!
+
+    createRoom(input: RoomInput!): Room!
+    updateRoom(id: ID!, input: RoomInput!): Room!
+    deleteRoom(id: ID!): Boolean!
+}
+
+
+#Device
+union Device = AdjustableDevice | SwitchableDevice
+
+enum DeviceType{
+    SWITCHABLE
+    ADJUSTABLE
+}
+
+type AdjustableDevice{
+    id: ID!
+    type: DeviceType!
+    totalConsumptionPerHour: Float!
+    dailyConsumption: Float!
+    room: Room
+    status: Boolean!
+    level:Float!
+}
+
+type SwitchableDevice{
+    id: ID!
+    type: DeviceType!
+    totalConsumptionPerHour: Float!
+    dailyConsumption: Float!
+    room: Room
+    status: Boolean!
+}
+
+
+input DeviceInput{
+    type: DeviceType!
+    totalConsumptionPerHour: Float!
+    roomId: ID!
+}
+
+#Room
+type Room{
+    id:ID!
+    name: String!
+    devices:[Device!]
+}
+
+#soru: neden id de yazılmıyor inputta
+input RoomInput{
+    name:String!
+}
+
+#User
+type User{
+    id: ID!
+    name:String!
+    email:String!
+    automationRules:[AutomationRule!]
+}
+
+input UserInput{
+    name: String!
+    email: String!
+    password: String!
+}
+
+#Action
+union Action= TurnOnAction | TurnOffAction
+
+type TurnOnAction{
+    type: String!
+}
+
+type TurnOffAction{
+    type: String!
+}
+
+input ActionInput{
+    type: String! #bu string olmamalı bence
+}
+
+#Condition
+union Condition= TemperatureCondition | TimeCondition
+
+type TemperatureCondition{
+    threshold: Float!
+}
+
+type TimeCondition{
+    targetTime: String!
+}
+
+input ConditionInput{
+    type : String! #bunu string yerine nasıl yapabilirz
+    config: ConditionConfigInput!
+}
+#config inputu ayırmak gerekli mi?
+input ConditionConfigInput{
+    threshold: Float
+    targetTime: String
+}
+
+#Automation Rule
+type AutomationRule{
+    id: ID!
+    name: String!
+    device: [Device!]
+    condition: Condition!
+    action: Action!
+}
+
+input AutomationRuleInput{
+    name:String!
+    deviceIds:[ID!]!
+    condition: ConditionInput!
+    action: ActionInput!
+}
+
+#Energy Report
+
+type EnergyReport{
+    reportId:ID!
+    device: Device!
+    date: String! #date classını kullandıgımızda da mı string?
+    totalConsumption: Float!
+}
+
+input EnergyReportInput{
+    deviceId:ID!
+    date: String! #String?
+    totalConsumption: Float!
+}
