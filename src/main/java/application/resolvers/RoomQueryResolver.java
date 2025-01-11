@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RoomGraphQLResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class RoomQueryResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
     private final RoomService roomService;
 
     @Autowired
-    public RoomGraphQLResolver(RoomService roomService) {
+    public RoomQueryResolver(RoomService roomService) {
         this.roomService = roomService;
     }
 
@@ -27,17 +27,6 @@ public class RoomGraphQLResolver implements GraphQLQueryResolver, GraphQLMutatio
         return roomService.getAllRooms();
     }
 
-    /// ///Mutation
-    public RoomEntity createRoom(final RoomEntity roomEntity) {
-        return roomService.createRoom(roomEntity);
-    }
 
-    public RoomEntity updateRoom(final long id, final RoomEntity roomEntity) {
-        return roomService.updateRoom(id, roomEntity);
-    }
-
-    public boolean deleteRoom(final long id) {
-        return roomService.deleteRoom(id);
-    }
 
 }

@@ -1,37 +1,41 @@
 package infrastructure.adapters;
 
+import domain.models.Room;
 import infrastructure.persistence.entities.RoomEntity;
 import infrastructure.persistence.repositories.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
+import mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
     private final RoomRepository roomRepository;
+    private final RoomMapper roomMapper = RoomMapper.INSTANCE;
 
     @Autowired
     public RoomService(RoomRepository roomRepository){
         this.roomRepository = roomRepository;
     }
 
-    public RoomEntity createRoom(RoomEntity room){
-        return roomRepository.save(room);
+    public Room createRoom(Room room){
+        RoomEntity entity = roomMapper.domainToEntity(room);
+        RoomEntity savedEntity = roomRepository.save(entity);
+        return roomMapper.entityToDomain(savedEntity);
     }
 
-    public RoomEntity updateRoom(long id, RoomEntity room){
-        Optional<RoomEntity> existingRoomOpt = roomRepository.findById(id);
-        if(existingRoomOpt.isPresent()){
-            RoomEntity existingRoom = existingRoomOpt.get();
-            existingRoom.setName(room.getName());
-            existingRoom.setDevices(room.getDevices());
-            return roomRepository.save(existingRoom);
-        }else{
-            throw new EntityNotFoundException("Room with id " + id + " not found!");
-        }
+    public Room updateRoom(long id, Room room){
+        RoomEntity existingEntity = roomRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Room with id " + id + " not found!"));
+
+        existingEntity.setName(room.getName());
+        existingEntity.setDevices(room.getDevices());
+
+        RoomEntity updatedEntity = roomRepository.save(existingEntity);
+        return roomMapper.entityToDomain(updatedEntity);
     }
 
     public boolean deleteRoom(long id){
@@ -43,12 +47,17 @@ public class RoomService {
         }
     }
 
-    public Optional<RoomEntity> getRoomById(long id){
-        return roomRepository.findById(id);
+    public Room getRoomById(long id){
+        return roomRepository.findById(id)
+                .map(roomMapper::entityToDomain)
+                .orElseThrow(() -> new EntityNotFoundException("Room with id " + id + " not found!"));
     }
 
-    public List<RoomEntity> getAllRooms(){
-        return roomRepository.findAll();
+    public List<Room> getAllRooms(){
+        return roomRepository.findAll()
+                .stream()
+                .map(roomMapper::entityToDomain)
+                .collect(Collectors.toList());
     }
 
     //getAllDevicesInRoom icin private deviceRepository tanimlayip oradan cekebilirsin dedi
