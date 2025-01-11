@@ -1,39 +1,43 @@
 package infrastructure.adapters;
 
+import domain.models.device.Device;
 import infrastructure.persistence.entities.DeviceEntity;
 import infrastructure.persistence.repositories.DeviceRepository;
 import jakarta.persistence.EntityNotFoundException;
+import mapper.DeviceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DeviceService {
 
     private final DeviceRepository deviceRepository;
+    private final DeviceMapper deviceMapper = DeviceMapper.INSTANCE;
 
     @Autowired
     public DeviceService(DeviceRepository deviceRepository) {
         this.deviceRepository = deviceRepository;
     }
 
-    public DeviceEntity createDevice(DeviceEntity device) {
-        return deviceRepository.save(device);
+    public Device createDevice(Device device) {
+        DeviceEntity entity = deviceMapper.domainToEntity(device);
+        DeviceEntity savedEntity = deviceRepository.save(entity);
+        return deviceMapper.entityToDomain(savedEntity);
     }
 
-    public DeviceEntity updateDevice(long id, DeviceEntity device) {
-        Optional<DeviceEntity> existingUserOpt = deviceRepository.findById(id);
-        if (existingUserOpt.isPresent()) {
-            DeviceEntity existingDevice = existingUserOpt.get();
-            existingDevice.setAutomationRules(device.getAutomationRules());
-            existingDevice.setRoom(device.getRoom());
-            existingDevice.setStatus(device.isStatus());
-            return deviceRepository.save(existingDevice);
-        }else{
-            throw new EntityNotFoundException("Device with id " + id + " not found!");
-        }
+    public Device updateDevice(long id, Device device) {
+        DeviceEntity existingEntity = deviceRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Device with id " + id + " not found!"));
+
+        existingEntity.setRoom(device.getRoom());
+        existingEntity.setStatus(device.isStatus());
+        existingEntity.setAutomationRules(device.getAutomationRules());
+
+        DeviceEntity updatedEntity = deviceRepository.save(existingEntity);
+        return deviceMapper.entityToDomain(updatedEntity);
     }
 
     public boolean deleteDevice(long id) {
@@ -45,11 +49,16 @@ public class DeviceService {
         }
     }
 
-    public Optional<DeviceEntity> getDeviceById(long id) {
-        return deviceRepository.findById(id);
+    public Device getDeviceById(long id) {
+        return deviceRepository.findById(id)
+                .map(deviceMapper::entityToDomain)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found!"));
     }
 
-    public List<DeviceEntity> getAllDevices() {
-        return deviceRepository.findAll();
+    public List<Device> getAllDevices() {
+        return deviceRepository.findAll()
+                .stream()
+                .map(deviceMapper::entityToDomain)
+                .collect(Collectors.toList());
     }
 }

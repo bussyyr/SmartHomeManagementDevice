@@ -1,4 +1,4 @@
 package application.dto;
 
-public class dto {
+public class DeviceInput {
 }
