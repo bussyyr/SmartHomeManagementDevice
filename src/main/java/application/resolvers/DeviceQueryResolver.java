@@ -1,7 +1,6 @@
 package application.resolvers;
 
 import domain.models.device.Device;
-import graphql.kickstart.tools.GraphQLMutationResolver;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import infrastructure.adapters.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;

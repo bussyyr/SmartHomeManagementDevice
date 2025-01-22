@@ -1,10 +1,14 @@
 package infrastructure.adapters;
 
 import domain.models.device.Device;
+import infrastructure.persistence.entities.AutomationRuleEntity;
 import infrastructure.persistence.entities.DeviceEntity;
+import infrastructure.persistence.entities.RoomEntity;
 import infrastructure.persistence.repositories.DeviceRepository;
 import jakarta.persistence.EntityNotFoundException;
+import mapper.AutomationRuleMapper;
 import mapper.DeviceMapper;
+import mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,8 @@ public class DeviceService {
 
     private final DeviceRepository deviceRepository;
     private final DeviceMapper deviceMapper = DeviceMapper.INSTANCE;
+    private final RoomMapper roomMapper = RoomMapper.INSTANCE;
+    private final AutomationRuleMapper automationRuleMapper = AutomationRuleMapper.INSTANCE;
 
     @Autowired
     public DeviceService(DeviceRepository deviceRepository) {
@@ -32,9 +38,13 @@ public class DeviceService {
         DeviceEntity existingEntity = deviceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Device with id " + id + " not found!"));
 
-        existingEntity.setRoom(device.getRoom());
+        RoomEntity roomEntity = roomMapper.domainToEntity(device.getRoom());
+        existingEntity.setRoom(roomEntity);
+
         existingEntity.setStatus(device.isStatus());
-        existingEntity.setAutomationRules(device.getAutomationRules());
+
+        List<AutomationRuleEntity> automationRuleEntities = automationRuleMapper.domainsToEntities(device.getAutomationRules());
+        existingEntity.setAutomationRules(automationRuleEntities);
 
         DeviceEntity updatedEntity = deviceRepository.save(existingEntity);
         return deviceMapper.entityToDomain(updatedEntity);

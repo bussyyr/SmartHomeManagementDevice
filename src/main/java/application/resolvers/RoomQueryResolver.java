@@ -1,5 +1,6 @@
 package application.resolvers;
 
+import domain.models.Room;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import infrastructure.adapters.RoomService;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RoomQueryResolver implements GraphQLQueryResolver, GraphQLMutationResolver {
+public class RoomQueryResolver implements GraphQLQueryResolver {
     private final RoomService roomService;
 
     @Autowired
@@ -19,11 +20,11 @@ public class RoomQueryResolver implements GraphQLQueryResolver, GraphQLMutationR
     }
 
     //////Query
-    public RoomEntity getRoomById(final long id) {
-        return roomService.getRoomById(id).orElseGet(null);
+    public Room getRoomById(final long id) {
+        return roomService.getRoomById(id);
     }
 
-    public List<RoomEntity> getRooms() {
+    public List<Room> getRooms() {
         return roomService.getAllRooms();
     }
 

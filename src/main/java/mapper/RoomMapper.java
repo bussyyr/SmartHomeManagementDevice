@@ -6,6 +6,8 @@ import infrastructure.persistence.entities.RoomEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface RoomMapper {
     RoomMapper INSTANCE = Mappers.getMapper(RoomMapper.class);
@@ -15,4 +17,7 @@ public interface RoomMapper {
 
     Room inputToDomain(RoomInput input);
     RoomInput domainToInput(Room domain);
+
+    List<Room> entitiesToDomains(List<RoomEntity> entities);
+    List<RoomEntity> domainsToEntities(List<Room> domains);
 }

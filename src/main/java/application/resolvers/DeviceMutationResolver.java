@@ -18,7 +18,7 @@ public class DeviceMutationResolver implements GraphQLMutationResolver {
         this.deviceService = deviceService;
     }
 
-    /// Mutation (bunun ici entity kaldi denicez olmadi final long int, final String mail falan diye hepsini tek tek de veririz)
+
     public Device createDevice(DeviceInput deviceInput) {
         Device device = deviceMapper.inputToDomain(deviceInput);
         return deviceService.createDevice(device);

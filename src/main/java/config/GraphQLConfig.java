@@ -1,6 +1,6 @@
 package config;
 
-import application.resolvers.UserGraphQLResolver;
+import application.resolvers.UserQueryResolver;
 import graphql.kickstart.tools.SchemaParser;
 import graphql.schema.GraphQLSchema;
 import org.springframework.context.annotation.Bean;
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 public class GraphQLConfig {
 
     @Bean
-    public GraphQLSchema graphQLSchema(UserGraphQLResolver userGraphQLResolver) {
+    public GraphQLSchema graphQLSchema(UserQueryResolver userQueryResolver) {
         return SchemaParser.newParser()
                 .files("schema.graphqls")
-                .resolvers(userGraphQLResolver)
+                .resolvers(userQueryResolver)
                 .build()
                 .makeExecutableSchema();
     }

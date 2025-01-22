@@ -1,13 +1,17 @@
 package infrastructure.adapters;
 
 import domain.models.Room;
+import domain.models.device.Device;
+import infrastructure.persistence.entities.DeviceEntity;
 import infrastructure.persistence.entities.RoomEntity;
 import infrastructure.persistence.repositories.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
+import mapper.DeviceMapper;
 import mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper = RoomMapper.INSTANCE;
+    private final DeviceMapper deviceMapper = DeviceMapper.INSTANCE;
 
     @Autowired
     public RoomService(RoomRepository roomRepository){
@@ -32,7 +37,8 @@ public class RoomService {
                 .orElseThrow(() -> new EntityNotFoundException("Room with id " + id + " not found!"));
 
         existingEntity.setName(room.getName());
-        existingEntity.setDevices(room.getDevices());
+        List<DeviceEntity> deviceEntities = deviceMapper.domainsToEntities(room.getDevices());
+        existingEntity.setDevices(deviceEntities);
 
         RoomEntity updatedEntity = roomRepository.save(existingEntity);
         return roomMapper.entityToDomain(updatedEntity);

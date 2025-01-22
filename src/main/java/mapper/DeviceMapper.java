@@ -6,6 +6,8 @@ import infrastructure.persistence.entities.DeviceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface DeviceMapper {
     DeviceMapper INSTANCE = Mappers.getMapper(DeviceMapper.class);
@@ -17,4 +19,8 @@ public interface DeviceMapper {
     // DTO ↔ Domain dönüşümleri
     Device inputToDomain(DeviceInput input);
     DeviceInput domainToInput(Device domain);
+
+    //list
+    List<Device> entitiesToDomains(List<DeviceEntity> entities);
+    List<DeviceEntity> domainsToEntities(List<Device> domains);
 }

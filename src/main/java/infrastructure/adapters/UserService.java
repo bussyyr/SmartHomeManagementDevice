@@ -1,41 +1,51 @@
 package infrastructure.adapters;
 
+import domain.models.User;
+import infrastructure.persistence.entities.AutomationRuleEntity;
 import infrastructure.persistence.entities.DeviceEntity;
+import infrastructure.persistence.entities.RoomEntity;
 import infrastructure.persistence.entities.UserEntity;
 import infrastructure.persistence.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import mapper.AutomationRuleMapper;
+import mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
+    private final AutomationRuleMapper automationRuleMapper = AutomationRuleMapper.INSTANCE;
 
     @Autowired
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
-    public UserEntity createUser(UserEntity user){
-        return userRepository.save(user);
+    public User createUser(User user){
+        UserEntity entity = userMapper.domainToEntity(user);
+        UserEntity savedEntity = userRepository.save(entity);
+        return userMapper.entityToDomain(savedEntity);
     }
 
-    public UserEntity updateUser(long id, UserEntity user){
-        Optional<UserEntity> existingUserOpt = userRepository.findById(id);
-        if(existingUserOpt.isPresent()){
-            UserEntity existingUser = existingUserOpt.get();
-            existingUser.setName(user.getName());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setAutomationRules(user.getAutomationRules());
-            return userRepository.save(existingUser);
-        }else{
-            throw new EntityNotFoundException("User with id " + id + " not found!");
-        }
+    public User updateUser(long id, User user){
+        UserEntity existingEntity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found!"));
+        existingEntity.setName(user.getName());
+        existingEntity.setEmail(user.getEmail());
+        existingEntity.setPassword(user.getPassword());
+
+        List<AutomationRuleEntity> automationRuleEntities = automationRuleMapper.domainsToEntities(user.getAutomationRules());
+        existingEntity.setAutomationRules(automationRuleEntities);
+
+        UserEntity updatedEntity = userRepository.save(existingEntity);
+        return userMapper.entityToDomain(updatedEntity);
     }
 
     public boolean deleteUser(long id){
@@ -47,23 +57,32 @@ public class UserService {
         }
     }
 
-    public Optional<UserEntity> getUserById(long id){
-        return userRepository.findById(id);
+    public User getUserById(long id){
+        return userRepository.findById(id)
+                .map(userMapper::entityToDomain)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found!"));
     }
 
     //bu kadar cok get methoduna gerek var mi
 
-    public Optional<UserEntity> getUserByEmail(String email){
-        return userRepository.findByEmail(email);
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email)
+                .map(userMapper::entityToDomain)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found!"));
     }
 
-    public Optional<UserEntity> getUserByName(String name) {
-        return userRepository.findByName(name);
+    public User getUserByName(String name) {
+        return userRepository.findByName(name)
+                .map(userMapper::entityToDomain)
+                .orElseThrow(() -> new EntityNotFoundException("User with name " + name + " not found!"));
     }
 
     //getDevicesOfUser sikintili
 
-    public List<UserEntity> getAllUsers(){
-        return userRepository.findAll();
+    public List<User> getAllUsers(){
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::entityToDomain)
+                .collect(Collectors.toList());
     }
 }
