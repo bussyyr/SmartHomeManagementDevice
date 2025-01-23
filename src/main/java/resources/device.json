@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "room": "Living Room",
+    "status": true,
+    "automationRules": "Turn off at 10 PM"
+  },
+  {
+    "id": 2,
+    "room": "Bedroom",
+    "status": false,
+    "automationRules": "Turn on at 7 AM"
+  }
+]

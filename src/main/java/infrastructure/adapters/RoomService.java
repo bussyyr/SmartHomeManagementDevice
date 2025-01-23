@@ -1,7 +1,6 @@
 package infrastructure.adapters;
 
 import domain.models.Room;
-import domain.models.device.Device;
 import infrastructure.persistence.entities.DeviceEntity;
 import infrastructure.persistence.entities.RoomEntity;
 import infrastructure.persistence.repositories.RoomRepository;
@@ -11,7 +10,6 @@ import mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

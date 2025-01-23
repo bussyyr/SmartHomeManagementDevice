@@ -5,12 +5,12 @@ import domain.models.device.Device;
 import java.time.LocalDate;
 
 public class EnergyReport {
-    private int energyReportId;
+    private long energyReportId;
     private LocalDate date;
     private Device device;
     private double totalConsumption;
 
-    public EnergyReport(int energyReportId, Device device, double totalConsumption) {
+    public EnergyReport(long energyReportId, Device device, double totalConsumption) {
         this.energyReportId = energyReportId;
         this.date = LocalDate.now();
         this.device = device;
@@ -21,11 +21,11 @@ public class EnergyReport {
         return device.getTotalConsumptionPerHour() * device.getDailyConsumption();
     }
 
-    public int getEnergyReportId() {
+    public long getEnergyReportId() {
         return energyReportId;
     }
 
-    public void setEnergyReportId(int energyReportId) {
+    public void setEnergyReportId(long energyReportId) {
         this.energyReportId = energyReportId;
     }
 

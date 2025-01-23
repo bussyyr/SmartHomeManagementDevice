@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface EnergyReportService {
 
     EnergyReport createEnergyReport(EnergyReport report);
-    boolean deleteEnergyReport(int id);
+    boolean deleteEnergyReport(long id);
 
-    Optional<EnergyReport> getEnergyReportsById(int id);
+    Optional<EnergyReport> getEnergyReportsById(long id);
     Optional<EnergyReport> getEnergyReportByDate(Date date);
 
     List<EnergyReport> getAllEnergyReports();

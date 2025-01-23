@@ -9,10 +9,10 @@ import java.util.Optional;
 public interface RoomService {
 
     Room createRoom(Room room);
-    Room updateRoom(int id, Room room);
-    boolean deleteRoom(int id);
+    Room updateRoom(long id, Room room);
+    boolean deleteRoom(long id);
 
-    Optional<Room> getRoomById(int id);
+    Optional<Room> getRoomById(long id);
     List<Room> getAllRooms();
-    List<Device> getAllDevicesInRoom(int id);
+    List<Device> getAllDevicesInRoom(long id);
 }

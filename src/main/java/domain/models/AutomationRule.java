@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutomationRule {
-    private int automationRuleId;
+    private long automationRuleId;
     private String name;
     private List<Device> devices;
     private Condition condition;
     private Action action;
 
-    public AutomationRule(int automationRuleId, String name, Condition condition, Action action) {
+    public AutomationRule(long automationRuleId, String name, Condition condition, Action action) {
         this.automationRuleId = automationRuleId;
         this.name = name;
         this.condition = condition;
@@ -30,11 +30,11 @@ public class AutomationRule {
         }
     }
 
-    public int getAutomationRuleId() {
+    public long getAutomationRuleId() {
         return automationRuleId;
     }
 
-    public void setAutomationRuleId(int automationRuleId) {
+    public void setAutomationRuleId(long automationRuleId) {
         this.automationRuleId = automationRuleId;
     }
 

@@ -8,10 +8,10 @@ import java.util.Optional;
 public interface DeviceService {
 
     Device createDevice(Device device);
-    Device updateDevice(int id, Device device);
-    boolean deleteDevice(int id);
+    Device updateDevice(long id, Device device);
+    boolean deleteDevice(long id);
 
-    Optional<Device> getDeviceById(int id);
+    Optional<Device> getDeviceById(long id);
 
     List<Device> getAllDevice();
 }

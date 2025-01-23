@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface AutomationRuleService {
     
     AutomationRule createAutomationRule(AutomationRule rule);
-    AutomationRule updateAutomationRule(int id, AutomationRule newRule);
-    boolean deleteAutomationRule(int id);
+    AutomationRule updateAutomationRule(long id, AutomationRule newRule);
+    boolean deleteAutomationRule(long id);
 
-    Optional<AutomationRule> getAutomationRuleById(int id);
+    Optional<AutomationRule> getAutomationRuleById(long id);
     List<AutomationRule> getAllAutomationRules();
 }

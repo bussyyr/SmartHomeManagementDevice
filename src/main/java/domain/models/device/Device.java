@@ -16,7 +16,7 @@ public abstract class Device {
         ADJUSTABLE
     }
 
-    private int deviceId;
+    private long deviceId;
     private boolean status;
     private deviceType deviceType;
     private double totalConsumptionPerHour;
@@ -26,7 +26,7 @@ public abstract class Device {
     private List<AutomationRule> automationRules;
     private Room room;
 
-    public Device(int deviceId, deviceType deviceType, double totalConsumptionPerHour, Room room) {
+    public Device(long deviceId, deviceType deviceType, double totalConsumptionPerHour, Room room) {
         this.deviceId = deviceId;
         this.status = false;
         this.deviceType = deviceType;
@@ -55,11 +55,11 @@ public abstract class Device {
         }
     }
 
-    public int getDeviceId() {
+    public long getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(int deviceId) {
+    public void setDeviceId(long deviceId) {
         this.deviceId = deviceId;
     }
 
