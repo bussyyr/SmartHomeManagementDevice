@@ -10,8 +10,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <hibernate.version>6.4.0.Final</hibernate.version>
         <jakarta.persistence.version>3.2.0</jakarta.persistence.version>
         <junit.jupiter.version>5.11.0</junit.jupiter.version>
@@ -58,18 +58,13 @@
         </dependency>
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
-            <artifactId>graphiql-spring-boot-starter</artifactId>
-            <version>11.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-java-tools</artifactId>
             <version>11.1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>3.1.2</version>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-autoconfigure</artifactId>
+            <version>11.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -87,23 +82,23 @@
             <version>11.0.15</version>
         </dependency>
         <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java</artifactId>
-            <version>21.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.9</version> <!-- Kullandığınız SLF4J sürümüne dikkat edin -->
+            <version>1.7.30</version> <!-- En son sürümü kontrol edin -->
         </dependency>
 
-        <!-- Logback Classic (SLF4J için bir backend) -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.11</version>
+            <version>1.2.3</version> <!-- En son sürümü kontrol edin -->
         </dependency>
 
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.1.2</version>
+        </dependency>
 
 
     </dependencies>
@@ -117,6 +112,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.1.2</version> <!-- Uygun versiyonu kontrol edin -->
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
