@@ -1,4 +1,4 @@
-package domain.controllers;
+package api.controllers;
 
 public class EnergyReportController {
 }

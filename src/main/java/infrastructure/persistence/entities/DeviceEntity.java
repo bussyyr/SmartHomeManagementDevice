@@ -1,7 +1,10 @@
 package infrastructure.persistence.entities;
 
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
 import java.util.List;

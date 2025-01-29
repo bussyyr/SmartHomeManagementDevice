@@ -1,4 +1,4 @@
-package domain.controllers;
+package api.controllers;
 
 
 import infrastructure.api.dto.RoomInput;
